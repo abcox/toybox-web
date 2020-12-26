@@ -12,7 +12,7 @@
 
       <v-col class="mb-4">
         <h1 class="display-2 font-weight-bold mb-3">
-          Welcome to Vuetify
+          {{ model.title }}
         </h1>
 
         <p class="subheading font-weight-regular">
@@ -85,7 +85,19 @@
 import Vue from "vue";
 
 export default Vue.extend({
-  name: "HelloWorld",
+  name: "WelcomeComponent",
+
+  props: ["model"],
+
+  created() {
+    console.log("model: ", this.model.title);
+  },
+
+  watch: {
+    model(val) {
+      console.log("model: ", this.model.title);
+    }
+  },
 
   data: () => ({
     ecosystem: [

@@ -20,7 +20,7 @@ import ContactsComponent from "../components/contacts-component.vue";
   }
 })
 export default class Contacts extends Vue {
-  title: "Contacts";
+  title = "Contacts";
 
   goBack() {
     window.history.length > 1 ? this.$router.go(-1) : this.$router.push("/");

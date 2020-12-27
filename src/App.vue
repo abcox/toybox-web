@@ -119,25 +119,27 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
+import router from "vue-router";
+import { Component, Vue } from "vue-property-decorator";
 //import HelloWorld from "./components/HelloWorld.vue";
 
-export default Vue.extend({
-  name: "App",
-
+@Component({
   components: {
     //HelloWorld
-  },
+  }
+})
+export default class App extends Vue {
+  router;
 
-  data: () => ({
-    menu: {
-      items: [
-        { title: "Suppliers", icon: "mdi-folder", route: "/about" },
-        { title: "Materials", icon: "mdi-folder", route: "/" },
-        { title: "Assemblies", icon: "mdi-folder", route: "/" },
-        { title: "Contacts", icon: "mdi-folder", route: "/contacts" }
-      ]
-    }
-  })
-});
+  name = "App";
+
+  menu = {
+    items: [
+      { title: "Suppliers", icon: "mdi-folder", route: "/about" },
+      { title: "Materials", icon: "mdi-folder", route: "/" },
+      { title: "Assemblies", icon: "mdi-folder", route: "/" },
+      { title: "Contacts", icon: "mdi-folder", route: "/contacts" }
+    ]
+  };
+}
 </script>

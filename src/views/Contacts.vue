@@ -11,21 +11,19 @@
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
 //import HelloWorld from "@/components/HelloWorld.vue"; // @ is an alias to /src
-import ContactsComponent from "@/components/contacts-component.vue";
+import ContactsComponent from "../components/contacts-component.vue";
 
 @Component({
   components: {
     //HelloWorld
     ContactsComponent
-  },
-  data: () => ({
-    title: "Contacts"
-  }),
-  methods: {
-    goBack() {
-      window.history.length > 1 ? this.$router.go(-1) : this.$router.push("/");
-    }
   }
 })
-export default class Contacts extends Vue {}
+export default class Contacts extends Vue {
+  title: "Contacts";
+
+  goBack() {
+    window.history.length > 1 ? this.$router.go(-1) : this.$router.push("/");
+  }
+}
 </script>

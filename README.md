@@ -1,4 +1,4 @@
-# toybox4
+# toybox (web)
 
 ## Project setup
 ```

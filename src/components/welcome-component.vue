@@ -96,6 +96,7 @@ export default Vue.extend({
   watch: {
     model(val) {
       console.log("model: ", this.model.title);
+      console.log("val: ", val);
     }
   },
 

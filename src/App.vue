@@ -127,8 +127,8 @@
 </template>
 
 <script lang="ts">
-//import router from "vue-router";
-//import store from "./store";
+import router from "vue-router";
+import store from "./store";
 import { Component, Vue } from "vue-property-decorator";
 //import HelloWorld from "./components/HelloWorld.vue";
 

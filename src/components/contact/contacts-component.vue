@@ -105,8 +105,11 @@
 
 <script lang="ts">
 import { Component, Vue, Watch } from "vue-property-decorator";
-import Contact from "./contact";
+import { Action, Getter, State } from "vuex-class";
+import { Contact, ContactState } from "./types";
 import axios from "axios";
+
+const namespace = "contact";
 
 @Component({
   components: {
@@ -114,6 +117,17 @@ import axios from "axios";
   }
 })
 export default class Home extends Vue {
+  // ref: https://github.com/ktsn/vuex-class
+  @State("contact") contact: ContactState;
+  @Action("fetchData", { namespace }) fetchData: any; // todo: move axios work here ??
+  //@Getter('fullName', { namespace }) fullName: string;  // todo
+  @Getter("items", { namespace }) items: Contact[];
+
+  /*   constructor() {
+    super();
+    this.contact = { error: false };
+  } */
+
   baseUrl = "http://localhost:3000/contact";
 
   name = "contacts-component";
@@ -127,15 +141,15 @@ export default class Home extends Vue {
     { text: "Actions", value: "actions", sortable: false },
     { text: "Id", value: "id", visible: false }
   ];
-  items: Contact[] = [];
+  //items: Contact[] = [];
   editedIndex = -1;
-  editedItem = {
+  editedItem: Contact = {
     id: "",
     name: "",
     email: "",
     phone: ""
   };
-  defaultItem = {
+  defaultItem: Contact = {
     id: "",
     name: "",
     email: "",
@@ -160,8 +174,12 @@ export default class Home extends Vue {
     this.initialize();
   }
 
+  mounted() {
+    this.fetchData();
+  }
+
   initialize() {
-    this.getItems();
+    //this.getItems();
   }
 
   getItems() {

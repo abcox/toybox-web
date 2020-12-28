@@ -1,6 +1,7 @@
 import Vue from "vue";
 import Vuex, { StoreOptions } from "vuex";
 import { RootState } from "./types";
+import { contact } from "../components/contact";
 
 Vue.use(Vuex);
 
@@ -21,7 +22,9 @@ const store: StoreOptions<RootState> = {
     }
   },
   actions: {},
-  modules: {}
+  modules: {
+    contact
+  }
 };
 
 //export default new Vuex.Store({});

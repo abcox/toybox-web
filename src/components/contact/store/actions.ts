@@ -27,7 +27,7 @@ export const actions: ActionTree<ContactState, RootState> = {
         } */
       )
       .then(response => {
-        commit("deleteItemSuccess", { response });
+        commit("deleteItemSuccess", { payload: response?.data });
       })
       .catch(
         err => {

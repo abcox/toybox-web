@@ -16,16 +16,16 @@ export const mutations: MutationTree<ContactState> = {
       color: "error"
     };
   },
-  deleteItemSuccess(state, { response }) {
-    const { id, message } = response?.data;
+  deleteItemSuccess(state, { payload }) {
+    const { id, meta } = payload;
     state.error = false;
     state.items = !state.items
       ? undefined
       : state.items?.filter(item => item.id !== id);
     state.status = {
       show: true,
-      text: message, // "Item deleted",
-      color: "success"
+      text: meta.status.message,
+      color: meta.status.color
     };
   },
   deleteItemFailure(state, { err }) {
@@ -61,12 +61,16 @@ export const mutations: MutationTree<ContactState> = {
     };
   },
   createItemSuccess(state, { payload }) {
-    console.log("payload: ", payload);
+    const { item, meta } = payload;
     state.error = false;
     if (state.items) {
-      state.items?.push(payload.item);
+      state.items?.push(item);
     }
-    state.status = { show: true, text: payload.message, color: "success" };
+    state.status = {
+      show: true,
+      text: meta.status.message,
+      color: meta.status.color
+    };
   },
   createItemFailure(state, { err }) {
     console.error(err);

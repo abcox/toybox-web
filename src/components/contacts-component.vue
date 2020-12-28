@@ -81,6 +81,25 @@
         <v-btn color="primary" @click="initialize"> Reset </v-btn>
       </template>
     </v-data-table>
+    <v-snackbar
+      top
+      right
+      :color="snackbar.color"
+      v-model="snackbar.show"
+      elevation="24"
+    >
+      {{ snackbar.text }}
+      <template v-slot:action="{ attrs }">
+        <v-btn
+          color="#ffffff"
+          text
+          v-bind="attrs"
+          @click="snackbar.show = false"
+        >
+          Close
+        </v-btn>
+      </template>
+    </v-snackbar>
   </v-container>
 </template>
 
@@ -158,6 +177,11 @@ export default class Home extends Vue {
       })
       .catch(err => {
         debug(err);
+        this.snackbar = {
+          show: true,
+          text: "Failed to get item list",
+          color: "error"
+        };
       });
   }
 
@@ -185,7 +209,7 @@ export default class Home extends Vue {
         console.log("response: ", response);
         //this.items.splice(this.editedIndex, 1);
         this.items = this.items.filter(item => item.id !== id);
-        //this.snackbar = { show: true, text: "Deleted", color: "success" }
+        this.snackbar = { show: true, text: "Item deleted", color: "success" };
       })
       .catch(
         err => {
@@ -232,9 +256,19 @@ export default class Home extends Vue {
           this.items = this.items.map(item =>
             item.id !== targetItem.id ? item : targetItem
           );
+          this.snackbar = {
+            show: true,
+            text: "Item updated",
+            color: "success"
+          };
         })
         .catch(err => {
           debug(err);
+          this.snackbar = {
+            show: true,
+            text: "Failed to update item",
+            color: "error"
+          };
         });
     } else {
       axios
@@ -247,12 +281,24 @@ export default class Home extends Vue {
  */ this.items.push(
             response.data
           );
+          this.snackbar = {
+            show: true,
+            text: "Item created",
+            color: "success"
+          };
         })
         .catch(err => {
           debug(err);
+          this.snackbar = {
+            show: true,
+            text: "Failed to create item",
+            color: "error"
+          };
         });
     }
     this.close();
   }
+
+  snackbar = { show: false, text: null, color: "success" };
 }
 </script>

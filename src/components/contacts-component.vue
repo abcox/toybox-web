@@ -89,7 +89,7 @@ import { Component, Vue, Watch } from "vue-property-decorator";
 import { Desert } from "../models/desert-model";
 import Contact from "./contact";
 import axios from "axios";
-import { debug } from "console";
+import debug from "console";
 
 @Component({
   components: {
@@ -174,7 +174,26 @@ export default class Home extends Vue {
   }
 
   deleteItemConfirm() {
-    this.items.splice(this.editedIndex, 1);
+    const id = this.editedItem.id;
+    axios
+      .delete(
+        `${this.baseUrl}/${id}` /* , null, {
+        headers: { 'x-csrf-token': this.xsrfToken }
+        } */
+      )
+      .then(response => {
+        console.log("response: ", response);
+        //this.items.splice(this.editedIndex, 1);
+        this.items = this.items.filter(item => item.id !== id);
+        //this.snackbar = { show: true, text: "Deleted", color: "success" }
+      })
+      .catch(
+        err => {
+          console.log("ERROR: ", err);
+        } /* ).finally(() => {
+      this.$store.commit('clearLoading')
+    } */
+      );
     this.closeDelete();
   }
 
@@ -218,7 +237,20 @@ export default class Home extends Vue {
           debug(err);
         });
     } else {
-      this.items.push(this.editedItem);
+      axios
+        .post(`${this.baseUrl}`, { ...targetItem })
+        .then(response => {
+          console.log("response: ", response);
+          /*           this.items = this.items.map(item =>
+            item.id !== targetItem.id ? item : targetItem
+          );
+ */ this.items.push(
+            response.data
+          );
+        })
+        .catch(err => {
+          debug(err);
+        });
     }
     this.close();
   }

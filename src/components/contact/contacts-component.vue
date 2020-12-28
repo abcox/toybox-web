@@ -64,7 +64,7 @@
                 <v-btn color="blue darken-1" text @click="closeDelete"
                   >Cancel</v-btn
                 >
-                <v-btn color="blue darken-1" text @click="deleteItemConfirm"
+                <v-btn color="blue darken-1" text @click="confirmItemDeletion"
                   >OK</v-btn
                 >
                 <v-spacer></v-spacer>
@@ -75,7 +75,7 @@
       </template>
       <template v-slot:[`item.actions`]="{ item }">
         <v-icon small class="mr-2" @click="editItem(item)"> mdi-pencil </v-icon>
-        <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
+        <v-icon small @click="selectItemForDeletion(item)"> mdi-delete </v-icon>
       </template>
       <template v-slot:no-data>
         <v-btn color="primary" @click="initialize"> Reset </v-btn>
@@ -118,15 +118,17 @@ const namespace = "contact";
 })
 export default class Home extends Vue {
   // ref: https://github.com/ktsn/vuex-class
-  @State("contact") contact: ContactState;
-  @Action("fetchData", { namespace }) fetchData: any; // todo: move axios work here ??
+  @State("contact") contact!: ContactState;
+  @Action("fetchItems", { namespace }) fetchItems: any; // todo: move axios work here ??
+  @Action("deleteItem", { namespace }) deleteItem!: (payload) => void; // todo: move axios work here ??
   //@Getter('fullName', { namespace }) fullName: string;  // todo
-  @Getter("items", { namespace }) items: Contact[];
+  @Getter("items", { namespace }) items!: Contact[];
 
-  /*   constructor() {
+  constructor() {
     super();
-    this.contact = { error: false };
-  } */
+    //this.contact = { error: false };
+    //this.items = [];
+  }
 
   baseUrl = "http://localhost:3000/contact";
 
@@ -175,7 +177,7 @@ export default class Home extends Vue {
   }
 
   mounted() {
-    this.fetchData();
+    this.fetchItems();
   }
 
   initialize() {
@@ -207,34 +209,31 @@ export default class Home extends Vue {
     this.dialog = true;
   }
 
-  deleteItem(item: Contact) {
+  selectItemForDeletion(item: Contact) {
     this.editedIndex = this.items.indexOf(item);
     this.editedItem = Object.assign({}, item);
     this.dialogDelete = true;
   }
 
-  deleteItemConfirm() {
+  confirmItemDeletion() {
     this.$store.commit("showLoading");
     const id = this.editedItem.id;
-    axios
+    console.log("delete item id ", id);
+    this.deleteItem({ id });
+    /* axios
       .delete(
-        `${this.baseUrl}/${id}` /* , null, {
-        headers: { 'x-csrf-token': this.xsrfToken }
-        } */
+        `${this.baseUrl}/${id}`
       )
       .then(response => {
         console.log("response: ", response);
-        //this.items.splice(this.editedIndex, 1);
         this.items = this.items.filter(item => item.id !== id);
         this.snackbar = { show: true, text: "Item deleted", color: "success" };
       })
       .catch(
         err => {
           console.log("ERROR: ", err);
-        } /* ).finally(() => {
-      this.$store.commit('clearLoading')
-    } */
-      );
+        }
+      ); */
     this.closeDelete();
     this.$store.commit("clearLoading");
   }

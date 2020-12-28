@@ -6,7 +6,7 @@ import { RootState } from "@/store/types";
 const baseUrl = "http://localhost:3000/contact";
 
 export const actions: ActionTree<ContactState, RootState> = {
-  fetchData({ commit }): any {
+  fetchItems({ commit }): any {
     axios
       .get<Contact[]>(`${baseUrl}/list`, {
         // no data
@@ -15,7 +15,7 @@ export const actions: ActionTree<ContactState, RootState> = {
         console.log("response: ", response);
         //this.items = response.data;
         const payload: Contact[] = response?.data;
-        commit("itemsResponse", payload);
+        commit("fetchItemsSuccess", payload);
       })
       .catch(err => {
         console.log(err);
@@ -24,7 +24,31 @@ export const actions: ActionTree<ContactState, RootState> = {
             text: "Failed to get item list",
             color: "error"
             }; */
-        commit("itemsResponseError");
+        commit("fetchItemsFailure");
       });
+  },
+  deleteItem({ commit }, { id }): any {
+    console.log("deleteItem id: ", id);
+    axios
+      .delete(
+        `${baseUrl}/${id}` /* , null, {
+        headers: { 'x-csrf-token': this.xsrfToken }
+        } */
+      )
+      .then(response => {
+        console.log("response: ", response);
+        const payload: Contact[] = response?.data;
+        //this.items = this.items.filter(item => item.id !== id);
+        //this.snackbar = { show: true, text: "Item deleted", color: "success" };
+        commit("deleteItemSuccess", { id });
+      })
+      .catch(
+        err => {
+          console.log("ERROR: ", err);
+          commit("deleteItemFailure");
+        } /* ).finally(() => {
+      this.$store.commit('clearLoading')
+    } */
+      );
   }
 };

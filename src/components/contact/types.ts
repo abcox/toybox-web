@@ -1,3 +1,5 @@
+import { Status } from "@/store/types";
+
 export interface Contact {
   id: string;
   name: string;
@@ -8,4 +10,5 @@ export interface Contact {
 export interface ContactState {
   items?: Contact[];
   error: boolean;
+  status: Status;
 }

@@ -8,7 +8,8 @@ Vue.use(Vuex);
 const store: StoreOptions<RootState> = {
   state: {
     // progress bar
-    loading: false
+    loading: false,
+    status: { show: false, text: "", color: "" }
   },
   mutations: {
     // progress bar

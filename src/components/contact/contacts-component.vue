@@ -84,18 +84,12 @@
     <v-snackbar
       top
       right
-      :color="snackbar.color"
-      v-model="snackbar.show"
+      :color="status.color"
+      v-model="status.show"
       elevation="24"
-    >
-      {{ snackbar.text }}
+      >{{ status.text }}
       <template v-slot:action="{ attrs }">
-        <v-btn
-          color="#ffffff"
-          text
-          v-bind="attrs"
-          @click="snackbar.show = false"
-        >
+        <v-btn color="#ffffff" text v-bind="attrs" @click="status.show = false">
           Close
         </v-btn>
       </template>
@@ -108,6 +102,7 @@ import { Component, Vue, Watch } from "vue-property-decorator";
 import { Action, Getter, State } from "vuex-class";
 import { Contact, ContactState } from "./types";
 import axios from "axios";
+import { Status } from "../../store/types";
 
 const namespace = "contact";
 
@@ -120,9 +115,10 @@ export default class Home extends Vue {
   // ref: https://github.com/ktsn/vuex-class
   @State("contact") contact!: ContactState;
   @Action("fetchItems", { namespace }) fetchItems: any; // todo: move axios work here ??
-  @Action("deleteItem", { namespace }) deleteItem!: (payload) => void; // todo: move axios work here ??
+  @Action("deleteItem", { namespace }) deleteItem!: (payload: any) => void; // todo: move axios work here ??
   //@Getter('fullName', { namespace }) fullName: string;  // todo
   @Getter("items", { namespace }) items!: Contact[];
+  @Getter("status", { namespace }) status!: Status;
 
   constructor() {
     super();
@@ -195,11 +191,11 @@ export default class Home extends Vue {
       })
       .catch(err => {
         console.log(err);
-        this.snackbar = {
+        /* this.snackbar = {
           show: true,
           text: "Failed to get item list",
           color: "error"
-        };
+        }; */
       });
   }
 
@@ -217,9 +213,7 @@ export default class Home extends Vue {
 
   confirmItemDeletion() {
     this.$store.commit("showLoading");
-    const id = this.editedItem.id;
-    console.log("delete item id ", id);
-    this.deleteItem({ id });
+    this.deleteItem({ ...this.editedItem });
     /* axios
       .delete(
         `${this.baseUrl}/${id}`
@@ -274,19 +268,19 @@ export default class Home extends Vue {
           this.items = this.items.map(item =>
             item.id !== targetItem.id ? item : targetItem
           );
-          this.snackbar = {
+          /* this.snackbar = {
             show: true,
             text: "Item updated",
             color: "success"
-          };
+          }; */
         })
         .catch(err => {
           console.log(err);
-          this.snackbar = {
+          /* this.snackbar = {
             show: true,
             text: "Failed to update item",
             color: "error"
-          };
+          }; */
         });
     } else {
       axios
@@ -299,29 +293,29 @@ export default class Home extends Vue {
  */ this.items.push(
             response.data
           );
-          this.snackbar = {
+          /* this.snackbar = {
             show: true,
             text: "Item created",
             color: "success"
-          };
+          }; */
         })
         .catch(err => {
           console.log(err);
-          this.snackbar = {
+          /* this.snackbar = {
             show: true,
             text: "Failed to create item",
             color: "error"
-          };
+          }; */
         });
     }
     this.close();
     this.$store.commit("clearLoading");
   }
 
-  snackbar: { show: boolean; text: string; color: string } = {
+  /* snackbar: { show: boolean; text: string; color: string } = {
     show: false,
     text: "",
     color: "success"
-  };
+  }; */
 }
 </script>

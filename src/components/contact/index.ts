@@ -9,7 +9,12 @@ import { RootState } from "../../store/types";
 
 export const state: ContactState = {
   items: undefined,
-  error: false
+  error: false,
+  status: {
+    show: false,
+    text: "",
+    color: ""
+  }
 };
 
 const namespaced = true;

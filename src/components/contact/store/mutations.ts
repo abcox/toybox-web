@@ -15,6 +15,7 @@ export const mutations: MutationTree<ContactState> = {
     state.items = !state.items
       ? undefined
       : state.items?.filter(item => item.id !== id);
+    state.status = { show: true, text: "Item deleted", color: "success" };
   },
   deleteItemFailure(state) {
     state.error = true;

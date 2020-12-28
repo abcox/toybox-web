@@ -20,5 +20,22 @@ export const mutations: MutationTree<ContactState> = {
   deleteItemFailure(state) {
     state.error = true;
     state.items = undefined;
+  },
+  updateItemSuccess(state, { updatedItem }) {
+    state.error = false;
+    state.items = !state.items
+      ? undefined
+      : state.items?.map(item =>
+          updatedItem.id === item.id ? updatedItem : item
+        );
+    state.status = { show: true, text: "Item updated", color: "success" };
+  },
+  updateItemFailure(state) {
+    state.error = true;
+    state.status = {
+      show: true,
+      text: "Failed to updated item",
+      color: "error"
+    };
   }
 };

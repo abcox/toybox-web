@@ -77,9 +77,9 @@
         <v-icon small class="mr-2" @click="editItem(item)"> mdi-pencil </v-icon>
         <v-icon small @click="selectItemForDeletion(item)"> mdi-delete </v-icon>
       </template>
-      <template v-slot:no-data>
+      <!-- <template v-slot:no-data>
         <v-btn color="primary" @click="initialize"> Reset </v-btn>
-      </template>
+      </template> -->
     </v-data-table>
     <v-snackbar
       top
@@ -116,6 +116,7 @@ export default class Home extends Vue {
   @State("contact") contact!: ContactState;
   @Action("fetchItems", { namespace }) fetchItems: any; // todo: move axios work here ??
   @Action("deleteItem", { namespace }) deleteItem!: (payload: any) => void; // todo: move axios work here ??
+  @Action("updateItem", { namespace }) updateItem!: (payload: any) => void; // todo: move axios work here ??
   //@Getter('fullName', { namespace }) fullName: string;  // todo
   @Getter("items", { namespace }) items!: Contact[];
   @Getter("status", { namespace }) status!: Status;
@@ -139,7 +140,6 @@ export default class Home extends Vue {
     { text: "Actions", value: "actions", sortable: false },
     { text: "Id", value: "id", visible: false }
   ];
-  //items: Contact[] = [];
   editedIndex = -1;
   editedItem: Contact = {
     id: "",
@@ -169,34 +169,11 @@ export default class Home extends Vue {
   }
 
   created() {
-    this.initialize();
+    // nothing
   }
 
   mounted() {
     this.fetchItems();
-  }
-
-  initialize() {
-    //this.getItems();
-  }
-
-  getItems() {
-    axios
-      .get<Contact[]>(`${this.baseUrl}/list`, {
-        // no data
-      })
-      .then(response => {
-        console.log("response: ", response);
-        this.items = response.data;
-      })
-      .catch(err => {
-        console.log(err);
-        /* this.snackbar = {
-          show: true,
-          text: "Failed to get item list",
-          color: "error"
-        }; */
-      });
   }
 
   editItem(item: Contact) {
@@ -212,22 +189,8 @@ export default class Home extends Vue {
   }
 
   confirmItemDeletion() {
-    this.$store.commit("showLoading");
+    this.$store.commit("showLoading"); // todo: move to state
     this.deleteItem({ ...this.editedItem });
-    /* axios
-      .delete(
-        `${this.baseUrl}/${id}`
-      )
-      .then(response => {
-        console.log("response: ", response);
-        this.items = this.items.filter(item => item.id !== id);
-        this.snackbar = { show: true, text: "Item deleted", color: "success" };
-      })
-      .catch(
-        err => {
-          console.log("ERROR: ", err);
-        }
-      ); */
     this.closeDelete();
     this.$store.commit("clearLoading");
   }
@@ -260,28 +223,18 @@ export default class Home extends Vue {
     console.log("item: ", targetItem);
     this.$store.commit("showLoading");
     if (this.editedIndex > -1) {
-      axios
+      /* axios
         .patch(`${this.baseUrl}/${targetItem.id}`, { ...targetItem })
         .then(response => {
           console.log("response: ", response);
-          //Object.assign(this.items[this.editedIndex], response.data);
           this.items = this.items.map(item =>
             item.id !== targetItem.id ? item : targetItem
           );
-          /* this.snackbar = {
-            show: true,
-            text: "Item updated",
-            color: "success"
-          }; */
         })
         .catch(err => {
           console.log(err);
-          /* this.snackbar = {
-            show: true,
-            text: "Failed to update item",
-            color: "error"
-          }; */
-        });
+        }); */
+      this.updateItem({ item: this.editedItem });
     } else {
       axios
         .post(`${this.baseUrl}`, { ...targetItem })

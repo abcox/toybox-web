@@ -12,17 +12,14 @@ export const actions: ActionTree<ContactState, RootState> = {
         // no data
       })
       .then(response => {
-        console.log("response: ", response);
         const payload: Contact[] = response?.data;
         commit("fetchItemsSuccess", payload);
       })
       .catch(err => {
-        console.log(err);
-        commit("fetchItemsFailure");
+        commit("fetchItemsFailure", { err });
       });
   },
   deleteItem({ commit }, { id }): any {
-    console.log("deleteItem id: ", id);
     axios
       .delete(
         `${baseUrl}/${id}` /* , null, {
@@ -30,41 +27,33 @@ export const actions: ActionTree<ContactState, RootState> = {
         } */
       )
       .then(response => {
-        console.log("response: ", response);
-        commit("deleteItemSuccess", { id });
+        commit("deleteItemSuccess", { response });
       })
       .catch(
         err => {
-          console.log("ERROR: ", err);
-          commit("deleteItemFailure");
+          commit("deleteItemFailure", { err });
         } /* ).finally(() => {
       this.$store.commit('clearLoading')
     } */
       );
   },
   updateItem({ commit }, { item }): any {
-    console.log("item: ", item);
     const targetItem = item;
-    console.log("targetItem: ", targetItem);
     axios
       .patch(`${baseUrl}/${targetItem.id}`, { ...targetItem })
       .then(response => {
-        console.log("response: ", response);
         commit("updateItemSuccess", { item: response?.data });
       })
       .catch(err => {
-        console.log("response: ", err);
-        commit("updateItemFailure");
+        commit("updateItemFailure", { err });
       });
   },
   createItem({ commit }, { item }): any {
-    console.log("item: ", item);
     const newItem = item;
-    console.log("newItem: ", newItem);
     axios
       .post(`${baseUrl}`, { ...newItem })
       .then(response => {
-        commit("createItemSuccess", { item: response?.data });
+        commit("createItemSuccess", { payload: response?.data });
       })
       .catch(err => {
         commit("createItemFailure", { err });

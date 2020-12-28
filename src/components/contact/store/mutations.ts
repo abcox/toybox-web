@@ -6,27 +6,30 @@ export const mutations: MutationTree<ContactState> = {
     state.error = false;
     state.items = payload;
   },
-  fetchItemsFailure(state) {
+  fetchItemsFailure(state, { err }) {
+    console.error(err);
     state.error = true;
     state.items = undefined;
     state.status = {
       show: true,
-      text: "Failed to fetch item",
+      text: "Failed to fetch items",
       color: "error"
     };
   },
-  deleteItemSuccess(state, { id }) {
+  deleteItemSuccess(state, { response }) {
+    const { id, message } = response?.data;
     state.error = false;
     state.items = !state.items
       ? undefined
       : state.items?.filter(item => item.id !== id);
     state.status = {
       show: true,
-      text: "Item deleted",
+      text: message, // "Item deleted",
       color: "success"
     };
   },
-  deleteItemFailure(state) {
+  deleteItemFailure(state, { err }) {
+    console.error(err);
     state.error = true;
     state.status = {
       show: true,
@@ -48,7 +51,8 @@ export const mutations: MutationTree<ContactState> = {
       color: "success"
     };
   },
-  updateItemFailure(state) {
+  updateItemFailure(state, { err }) {
+    console.error(err);
     state.error = true;
     state.status = {
       show: true,
@@ -56,16 +60,16 @@ export const mutations: MutationTree<ContactState> = {
       color: "error"
     };
   },
-  createItemSuccess(state, { item }) {
-    console.log("item: ", item);
+  createItemSuccess(state, { payload }) {
+    console.log("payload: ", payload);
     state.error = false;
     if (state.items) {
-      state.items?.push(item);
+      state.items?.push(payload.item);
     }
-    state.status = { show: true, text: "Item create", color: "success" };
+    state.status = { show: true, text: payload.message, color: "success" };
   },
   createItemFailure(state, { err }) {
-    console.log("ERROR: ", err);
+    console.error(err);
     state.error = true;
     state.status = {
       show: true,

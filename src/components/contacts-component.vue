@@ -105,10 +105,8 @@
 
 <script lang="ts">
 import { Component, Vue, Watch } from "vue-property-decorator";
-import { Desert } from "../models/desert-model";
 import Contact from "./contact";
 import axios from "axios";
-import debug from "console";
 
 @Component({
   components: {
@@ -176,7 +174,7 @@ export default class Home extends Vue {
         this.items = response.data;
       })
       .catch(err => {
-        debug(err);
+        console.log(err);
         this.snackbar = {
           show: true,
           text: "Failed to get item list",
@@ -198,6 +196,7 @@ export default class Home extends Vue {
   }
 
   deleteItemConfirm() {
+    this.$store.commit("showLoading");
     const id = this.editedItem.id;
     axios
       .delete(
@@ -219,6 +218,7 @@ export default class Home extends Vue {
     } */
       );
     this.closeDelete();
+    this.$store.commit("clearLoading");
   }
 
   close() {
@@ -247,6 +247,7 @@ export default class Home extends Vue {
   save() {
     const targetItem = this.editedItem;
     console.log("item: ", targetItem);
+    this.$store.commit("showLoading");
     if (this.editedIndex > -1) {
       axios
         .patch(`${this.baseUrl}/${targetItem.id}`, { ...targetItem })
@@ -263,7 +264,7 @@ export default class Home extends Vue {
           };
         })
         .catch(err => {
-          debug(err);
+          console.log(err);
           this.snackbar = {
             show: true,
             text: "Failed to update item",
@@ -288,7 +289,7 @@ export default class Home extends Vue {
           };
         })
         .catch(err => {
-          debug(err);
+          console.log(err);
           this.snackbar = {
             show: true,
             text: "Failed to create item",
@@ -297,8 +298,13 @@ export default class Home extends Vue {
         });
     }
     this.close();
+    this.$store.commit("clearLoading");
   }
 
-  snackbar = { show: false, text: null, color: "success" };
+  snackbar: { show: boolean; text: string; color: string } = {
+    show: false,
+    text: "",
+    color: "success"
+  };
 }
 </script>

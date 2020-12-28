@@ -107,6 +107,14 @@
         <span class="mr-2">Latest Release</span>
         <v-icon>mdi-open-in-new</v-icon>
       </v-btn>
+      <v-progress-linear
+        :v-if="$store.state.loading"
+        :active="$store.state.loading"
+        indeterminate
+        absolute
+        bottom
+        color="secondary primary-8"
+      ></v-progress-linear>
     </v-app-bar>
     <v-main>
       <!-- Provides the application the proper gutter -->
@@ -119,7 +127,8 @@
 </template>
 
 <script lang="ts">
-import router from "vue-router";
+//import router from "vue-router";
+//import store from "./store";
 import { Component, Vue } from "vue-property-decorator";
 //import HelloWorld from "./components/HelloWorld.vue";
 
@@ -136,8 +145,8 @@ export default class App extends Vue {
   menu = {
     items: [
       { title: "Suppliers", icon: "mdi-folder", route: "/about" },
-      { title: "Materials", icon: "mdi-folder", route: "/" },
-      { title: "Assemblies", icon: "mdi-folder", route: "/" },
+      { title: "Materials", icon: "mdi-folder", route: "/materials" },
+      { title: "Assemblies", icon: "mdi-folder", route: "/assemblies" },
       { title: "Contacts", icon: "mdi-folder", route: "/contacts" }
     ]
   };

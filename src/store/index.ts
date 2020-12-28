@@ -1,11 +1,28 @@
 import Vue from "vue";
-import Vuex from "vuex";
+import Vuex, { StoreOptions } from "vuex";
+import { RootState } from "./types";
 
 Vue.use(Vuex);
 
-export default new Vuex.Store({
-  state: {},
-  mutations: {},
+const store: StoreOptions<RootState> = {
+  state: {
+    // progress bar
+    loading: false
+  },
+  mutations: {
+    // progress bar
+    showLoading(state) {
+      state.loading = true;
+    },
+    clearLoading(state) {
+      setTimeout(() => {
+        state.loading = false;
+      }, 500);
+    }
+  },
   actions: {},
   modules: {}
-});
+};
+
+//export default new Vuex.Store({});
+export default new Vuex.Store<RootState>(store);

@@ -114,9 +114,10 @@ const namespace = "contact";
 export default class Home extends Vue {
   // ref: https://github.com/ktsn/vuex-class
   @State("contact") contact!: ContactState;
-  @Action("fetchItems", { namespace }) fetchItems: any; // todo: move axios work here ??
-  @Action("deleteItem", { namespace }) deleteItem!: (payload: any) => void; // todo: move axios work here ??
-  @Action("updateItem", { namespace }) updateItem!: (payload: any) => void; // todo: move axios work here ??
+  @Action("fetchItems", { namespace }) fetchItems: any;
+  @Action("deleteItem", { namespace }) deleteItem!: (payload: any) => void;
+  @Action("updateItem", { namespace }) updateItem!: (payload: any) => void;
+  @Action("createItem", { namespace }) createItem!: (payload: any) => void;
   //@Getter('fullName', { namespace }) fullName: string;  // todo
   @Getter("items", { namespace }) items!: Contact[];
   @Getter("status", { namespace }) status!: Status;
@@ -236,30 +237,18 @@ export default class Home extends Vue {
         }); */
       this.updateItem({ item: this.editedItem });
     } else {
-      axios
+      /* axios
         .post(`${this.baseUrl}`, { ...targetItem })
         .then(response => {
           console.log("response: ", response);
-          /*           this.items = this.items.map(item =>
-            item.id !== targetItem.id ? item : targetItem
-          );
- */ this.items.push(
+          this.items.push(
             response.data
           );
-          /* this.snackbar = {
-            show: true,
-            text: "Item created",
-            color: "success"
-          }; */
         })
         .catch(err => {
           console.log(err);
-          /* this.snackbar = {
-            show: true,
-            text: "Failed to create item",
-            color: "error"
-          }; */
-        });
+        }); */
+      this.createItem({ item: this.editedItem });
     }
     this.close();
     this.$store.commit("clearLoading");

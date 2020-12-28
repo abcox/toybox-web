@@ -50,11 +50,24 @@ export const actions: ActionTree<ContactState, RootState> = {
       .patch(`${baseUrl}/${targetItem.id}`, { ...targetItem })
       .then(response => {
         console.log("response: ", response);
-        commit("updateItemSuccess", { updatedItem: response?.data });
+        commit("updateItemSuccess", { item: response?.data });
       })
       .catch(err => {
         console.log("response: ", err);
         commit("updateItemFailure");
+      });
+  },
+  createItem({ commit }, { item }): any {
+    console.log("item: ", item);
+    const newItem = item;
+    console.log("newItem: ", newItem);
+    axios
+      .post(`${baseUrl}`, { ...newItem })
+      .then(response => {
+        commit("createItemSuccess", { item: response?.data });
+      })
+      .catch(err => {
+        commit("createItemFailure", { err });
       });
   }
 };

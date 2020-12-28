@@ -1,7 +1,7 @@
 <template>
   <v-container fluid>
     <v-data-table
-      :headers="headers"
+      :headers="computedHeaders"
       :items="items"
       sort-by="calories"
       class="elevation-1"
@@ -103,53 +103,27 @@ export default class Home extends Vue {
   title = "Contacts Component";
   dialog = false;
   dialogDelete = false;
-  /* headers = [
-    {
-      text: "Dessert (100g serving)",
-      align: "start",
-      sortable: false,
-      value: "name"
-    },
-    { text: "Calories", value: "calories" },
-    { text: "Fat (g)", value: "fat" },
-    { text: "Carbs (g)", value: "carbs" },
-    { text: "Protein (g)", value: "protein" },
-    { text: "Actions", value: "actions", sortable: false }
-  ]; */
   headers = [
     { text: "Name", value: "name" },
     { text: "Email", value: "email" },
     { text: "Phone", value: "phone" },
-    { text: "Actions", value: "actions", sortable: false }
+    { text: "Actions", value: "actions", sortable: false },
+    { text: "Id", value: "id", visible: false }
   ];
-  desserts: Array<Desert> = [];
-  editedIndex = -1;
-  /* editedItem = {
-    name: "",
-    calories: 0,
-    fat: 0,
-    carbs: 0,
-    protein: 0
-  };
-  defaultItem = {
-    name: "",
-    calories: 0,
-    fat: 0,
-    carbs: 0,
-    protein: 0
-  }; */
-  editedItem = {
-    name: "",
-    email: "",
-    phone: ""
-  };
-  defaultItem = {
-    name: "",
-    email: "",
-    phone: ""
-  };
-
   items: Contact[] = [];
+  editedIndex = -1;
+  editedItem = {
+    id: "",
+    name: "",
+    email: "",
+    phone: ""
+  };
+  defaultItem = {
+    id: "",
+    name: "",
+    email: "",
+    phone: ""
+  };
 
   get formTitle() {
     return this.editedIndex === -1 ? "New Item" : "Edit Item";
@@ -200,7 +174,7 @@ export default class Home extends Vue {
   }
 
   deleteItemConfirm() {
-    this.desserts.splice(this.editedIndex, 1);
+    this.items.splice(this.editedIndex, 1);
     this.closeDelete();
   }
 
@@ -220,9 +194,29 @@ export default class Home extends Vue {
     });
   }
 
+  get computedHeaders() {
+    return this.headers.filter(function(item) {
+      if (item.visible === false) return;
+      return item;
+    });
+  }
+
   save() {
+    const targetItem = this.editedItem;
+    console.log("item: ", targetItem);
     if (this.editedIndex > -1) {
-      Object.assign(this.items[this.editedIndex], this.editedItem);
+      axios
+        .patch(`${this.baseUrl}/${targetItem.id}`, { ...targetItem })
+        .then(response => {
+          console.log("response: ", response);
+          //Object.assign(this.items[this.editedIndex], response.data);
+          this.items = this.items.map(item =>
+            item.id !== targetItem.id ? item : targetItem
+          );
+        })
+        .catch(err => {
+          debug(err);
+        });
     } else {
       this.items.push(this.editedItem);
     }

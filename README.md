@@ -1,5 +1,7 @@
 # toybox (web)
 
+Front end (web) client for [toybox-api](https://github.com/abcox/toybox-api)
+
 ## Project setup
 ```
 npm install

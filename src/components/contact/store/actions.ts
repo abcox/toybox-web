@@ -64,7 +64,7 @@ export const actions: ActionTree<ContactState, RootState> = {
     axios
       .post(`${baseUrl}`, { ...newItem })
       .then(response => {
-        commit("createItemSuccess", { item: response?.data });
+        commit("createItemSuccess", { item: response?.data?.item });
       })
       .catch(err => {
         commit("createItemFailure", { err });

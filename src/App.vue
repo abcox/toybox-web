@@ -53,7 +53,7 @@
             {{ item.title }}
           </v-list-item-title>
         </v-list-item>
-        <v-list-item link>
+        <!-- <v-list-item link>
           <v-list-item-icon>
             <v-icon>mdi-folder</v-icon>
           </v-list-item-icon>
@@ -70,7 +70,7 @@
             <v-icon>mdi-star</v-icon>
           </v-list-item-icon>
           <v-list-item-title>Starred</v-list-item-title>
-        </v-list-item>
+        </v-list-item> -->
       </v-list>
     </v-navigation-drawer>
 
@@ -144,10 +144,10 @@ export default class App extends Vue {
 
   menu = {
     items: [
-      { title: "Suppliers", icon: "mdi-folder", route: "/about" },
+      { title: "Contacts", icon: "mdi-account-multiple", route: "/contacts" }
+      /* { title: "Suppliers", icon: "mdi-folder", route: "/about" },
       { title: "Materials", icon: "mdi-folder", route: "/materials" },
-      { title: "Assemblies", icon: "mdi-folder", route: "/assemblies" },
-      { title: "Contacts", icon: "mdi-folder", route: "/contacts" }
+      { title: "Assemblies", icon: "mdi-folder", route: "/assemblies" } */
     ]
   };
 }

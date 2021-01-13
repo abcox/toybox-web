@@ -1,7 +1,12 @@
 import { MutationTree } from "vuex";
-import { Contact, ContactState } from "../types";
+import { Contact, ContactListResponse, ContactState } from "../types";
 
 export const mutations: MutationTree<ContactState> = {
+  searchItemsSuccess(state, payload: ContactListResponse) {
+    state.error = false;
+    state.items = payload.items;
+    state.totalItems = payload.totalItems;
+  },
   fetchItemsSuccess(state, payload: Contact[]) {
     state.error = false;
     state.items = payload;

@@ -3,9 +3,10 @@
     <v-data-table
       :headers="computedHeaders"
       :items="items"
-      sort-by="calories"
+      :options.sync="options"
       class="elevation-1"
-    >
+      ><!--  TODO: place this above and finish implement of searchItems
+      :server-items-length="totalItems" -->
       <template v-slot:top>
         <v-toolbar flat>
           <!-- <v-toolbar-title>My CRUD</v-toolbar-title>
@@ -114,6 +115,7 @@ const namespace = "contact";
 export default class Home extends Vue {
   // ref: https://github.com/ktsn/vuex-class
   @State("contact") contact!: ContactState;
+  @Action("searchItems", { namespace }) searchItems!: (options: any) => any;
   @Action("fetchItems", { namespace }) fetchItems: any;
   @Action("deleteItem", { namespace }) deleteItem!: (payload: any) => void;
   @Action("updateItem", { namespace }) updateItem!: (payload: any) => void;
@@ -121,6 +123,7 @@ export default class Home extends Vue {
   //@Getter('fullName', { namespace }) fullName: string;  // todo
   @Getter("items", { namespace }) items!: Contact[];
   @Getter("status", { namespace }) status!: Status;
+  @Getter("totalItems", { namespace }) totalItems!: number;
 
   constructor() {
     super();
@@ -132,6 +135,7 @@ export default class Home extends Vue {
 
   name = "contacts-component";
   title = "Contacts Component";
+  options = {};
   dialog = false;
   dialogDelete = false;
   headers = [
@@ -157,6 +161,12 @@ export default class Home extends Vue {
 
   get formTitle() {
     return this.editedIndex === -1 ? "New Item" : "Edit Item";
+  }
+
+  @Watch("options", { immediate: true, deep: true })
+  optionsChanged(options: any) {
+    //options || this.searchItems(this.options);
+    options || this.fetchItems();
   }
 
   @Watch("dialog")

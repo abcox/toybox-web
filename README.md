@@ -59,9 +59,14 @@ npm run test:e2e    # Run end-to-end tests
 npm run lint        # Linting
 ```
 
-## Vuejs
-To customize, refer to [Configuration Reference](https://cli.vuejs.org/config/).
+## Support
 
-# Security (Identity)
+None
 
-1. Auth0 implementation as per "Adding Authentication to your Vue App" in [this article](https://auth0.com/blog/beginner-vuejs-tutorial-with-user-login/)
+## Contact
+
+- Author - [Adam Cox](http://linkedin.com/in/adamcox27)
+
+## License
+
+None

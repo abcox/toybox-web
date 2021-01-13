@@ -68,5 +68,14 @@ npm run test:e2e
 npm run lint
 ```
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+## Support
+
+None
+
+## Contact
+
+- Author - [Adam Cox](http://linkedin.com/in/adamcox27)
+
+## License
+
+None

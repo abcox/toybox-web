@@ -6,13 +6,13 @@ import { RootState } from "@/store/types";
 const baseUrl = "http://localhost:3000/contact";
 
 export const actions: ActionTree<ContactState, RootState> = {
-  fetchItems({ commit }): any {
+  fetchItems({ commit }, options): any {
+    console.log("options: ", options);
     axios
-      .get<Contact[]>(`${baseUrl}/list`, {
+      .get<Contact[]>(`${baseUrl}/list?${{ ...options }}`, {
         // no data
       })
       .then(response => {
-        console.log("response: ", response);
         const payload: Contact[] = response?.data;
         commit("fetchItemsSuccess", payload);
       })

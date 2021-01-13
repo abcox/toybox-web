@@ -3,7 +3,9 @@
     <v-data-table
       :headers="computedHeaders"
       :items="items"
+      :multi-sort="true"
       :options.sync="options"
+      :server-items-length="totalItems"
       class="elevation-1"
       ><!--  TODO: place this above and finish implement of searchItems
       :server-items-length="totalItems" -->
@@ -165,8 +167,8 @@ export default class Home extends Vue {
 
   @Watch("options", { immediate: true, deep: true })
   optionsChanged(options: any) {
-    //options || this.searchItems(this.options);
-    options || this.fetchItems();
+    console.log("options changed: ", options);
+    options || this.searchItems(this.options);
   }
 
   @Watch("dialog")
@@ -184,7 +186,7 @@ export default class Home extends Vue {
   }
 
   mounted() {
-    this.fetchItems();
+    this.fetchItems(this.options);
   }
 
   editItem(item: Contact) {

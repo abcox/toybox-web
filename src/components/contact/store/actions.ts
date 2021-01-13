@@ -12,6 +12,7 @@ export const actions: ActionTree<ContactState, RootState> = {
         // no data
       })
       .then(response => {
+        console.log("response: ", response);
         const payload: Contact[] = response?.data;
         commit("fetchItemsSuccess", payload);
       })

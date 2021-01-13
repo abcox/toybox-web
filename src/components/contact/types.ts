@@ -9,6 +9,12 @@ export interface Contact {
 
 export interface ContactState {
   items?: Contact[];
+  totalItems: number;
   error: boolean;
   status: Status;
+}
+
+export interface ContactListResponse {
+  items: Contact[];
+  totalItems: number;
 }

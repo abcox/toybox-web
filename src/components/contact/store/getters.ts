@@ -16,6 +16,6 @@ export const getters: GetterTree<ContactState, RootState> = {
     return state.status;
   },
   totalItems(state): number {
-    return state.totalItems;
+    return state.totalItems || 1;
   }
 };

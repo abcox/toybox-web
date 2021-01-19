@@ -6,13 +6,28 @@ import { RootState } from "@/store/types";
 const baseUrl = "http://localhost:3000/contact";
 
 export const actions: ActionTree<ContactState, RootState> = {
-  fetchItems({ commit }, options): any {
-    console.log("options: ", options);
+  searchItems({ commit }, request): any {
+    console.log("search request: ", request);
     axios
-      .get<Contact[]>(`${baseUrl}/list?${{ ...options }}`, {
+      .get(`${baseUrl}/search`, {
+        params: { ...request }
+      })
+      .then(response => {
+        console.log("search response: ", response);
+        //const payload: Contact[] = response?.data;
+        commit("searchItemsSuccess", { ...response?.data });
+      })
+      .catch(err => {
+        commit("fetchItemsFailure", { err });
+      });
+  },
+  fetchItems({ commit }, request): any {
+    axios
+      .get(`${baseUrl}/list?${{ ...request }}`, {
         // no data
       })
       .then(response => {
+        console.log("fetch response: ", response);
         const payload: Contact[] = response?.data;
         commit("fetchItemsSuccess", payload);
       })

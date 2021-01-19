@@ -13,6 +13,13 @@
         <v-toolbar flat>
           <!-- <v-toolbar-title>My CRUD</v-toolbar-title>
           <v-divider class="mx-4" inset vertical></v-divider> -->
+          <v-text-field
+            v-model="search"
+            append-icon="mdi-magnify"
+            label="Search"
+            single-line
+            hide-details
+          ></v-text-field>
           <v-spacer></v-spacer>
           <v-dialog v-model="dialog" max-width="500px">
             <template v-slot:activator="{ on, attrs }">
@@ -106,6 +113,15 @@ import { Action, Getter, State } from "vuex-class";
 import { Contact, ContactState } from "./types";
 import axios from "axios";
 import { Status } from "../../store/types";
+import {
+  BehaviorSubject,
+  fromEvent,
+  interval,
+  Subject,
+  pipe,
+  Observable
+} from "rxjs";
+import { debounce, debounceTime, switchMap } from "rxjs/operators";
 
 const namespace = "contact";
 
@@ -160,6 +176,8 @@ export default class Home extends Vue {
     email: "",
     phone: ""
   };
+  search = "";
+  search$ = new BehaviorSubject<string>("");
 
   get formTitle() {
     return this.editedIndex === -1 ? "New Item" : "Edit Item";
@@ -167,8 +185,7 @@ export default class Home extends Vue {
 
   @Watch("options", { immediate: true, deep: true })
   optionsChanged(options: any) {
-    console.log("options changed: ", options);
-    options || this.searchItems(this.options);
+    this.searchItems({ search: this.search, options: this.options });
   }
 
   @Watch("dialog")
@@ -181,11 +198,20 @@ export default class Home extends Vue {
     val || this.closeDelete();
   }
 
+  @Watch("search")
+  searchChanged(val: string) {
+    this.search$.next(val);
+  }
+
   created() {
-    // nothing
+    console.log("created!");
+    this.search$.pipe(debounceTime(500)).subscribe(search => {
+      this.searchItems({ search: this.search, options: this.options });
+    });
   }
 
   mounted() {
+    console.log("mounted!");
     this.fetchItems(this.options);
   }
 

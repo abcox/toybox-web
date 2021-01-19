@@ -1,4 +1,0 @@
-diff a/src/components/contact/store/actions.ts b/src/components/contact/store/actions.ts	(rejected hunks)
-@@ -15 +15 @@ export const actions: ActionTree<ContactState, RootState> = {
--        console.log("response: ", response)
-+        console.log("response: ", response);

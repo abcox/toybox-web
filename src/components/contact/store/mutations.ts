@@ -3,11 +3,13 @@ import { Contact, ContactListResponse, ContactState } from "../types";
 
 export const mutations: MutationTree<ContactState> = {
   searchItemsSuccess(state, payload: ContactListResponse) {
+    console.log("searchItemsSuccess payload: ", payload);
     state.error = false;
     state.items = payload.items;
     state.totalItems = payload.totalItems;
   },
   fetchItemsSuccess(state, payload: Contact[]) {
+    console.log("fetchItemsSuccess payload: ", payload);
     state.error = false;
     state.items = payload;
   },

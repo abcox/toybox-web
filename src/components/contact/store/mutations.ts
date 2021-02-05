@@ -1,4 +1,4 @@
-import { MutationTree } from "vuex";
+import { MutationTree } from "Vuex";
 import { Contact, ContactListResponse, ContactState } from "../types";
 
 export const mutations: MutationTree<ContactState> = {

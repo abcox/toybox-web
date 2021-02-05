@@ -16,12 +16,13 @@
     "core-js": "^3.6.5",
     "register-service-worker": "^1.7.1",
     "rxjs": "^6.6.3",
+    "toybox-api-client": "file:../api/client/typescript-axios",
     "vue": "^2.6.11",
     "vue-class-component": "^7.2.3",
     "vue-property-decorator": "^8.4.2",
     "vue-router": "^3.2.0",
     "vuetify": "^2.2.11",
-    "vuex": "^3.4.0",
+    "vuex": "^3.6.0",
     "vuex-class": "^0.3.2"
   },
   "devDependencies": {

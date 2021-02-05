@@ -1,4 +1,4 @@
-import { GetterTree } from "vuex";
+import { GetterTree } from "Vuex";
 import { Contact, ContactState } from "../types";
 import { RootState, Status } from "@/store/types";
 

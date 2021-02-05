@@ -115,8 +115,8 @@ import axios from "axios";
 import { Status } from "../../store/types";
 import {
   BehaviorSubject,
-  fromEvent,
-  interval,
+  /* fromEvent,
+  interval, */
   Subject,
   pipe,
   Observable

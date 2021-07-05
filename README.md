@@ -1,36 +1,24 @@
-# toybox (web)
+# Toybox Web
 
-Front end (web) client for [toybox-api](https://github.com/abcox/toybox-api)
+## Overview
 
-## Project setup
-```
-npm install
-```
+This is a front-end web client for the [toybox-api](https://github.com/abcox/toybox-api)
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+## Start here (npm scripts)
 
-### Compiles and minifies for production
-```
-npm run build
-```
+```bash
+npm install         # download packages
 
-### Run your unit tests
-```
-npm run test:unit
+npm run serve       # compile and initialize hot-reloads -- development
+
+npm run build       # compile and minify -- production
+
+npm run test:unit   # Run unit tests
+
+npm run test:e2e    # Run end-to-end tests
+
+npm run lint        # Linting
 ```
 
-### Run your end-to-end tests
-```
-npm run test:e2e
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+## Vuejs
+To customize, refer to [Configuration Reference](https://cli.vuejs.org/config/).

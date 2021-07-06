@@ -38,11 +38,12 @@
           </a>
         </v-row> -->
         <v-btn
-          v-for="(action, i) in next.actions"
+          :href="action.route"
           :key="i"
-          color="primary"
           class="mx-3"
+          color="primary"
           large
+          v-for="(action, i) in next.actions"
         >
           {{ action.title }}
         </v-btn>
@@ -71,6 +72,7 @@
 
 <script lang="ts">
 import Vue from "vue";
+import SignIn from "./auth/sign-in.vue";
 
 export default Vue.extend({
   name: "WelcomeComponent",
@@ -91,7 +93,7 @@ export default Vue.extend({
   data: () => ({
     next: {
       title: "What's next?",
-      actions: [{ title: "Sign-Up" }, { title: "Sign-In" }]
+      actions: [{ title: "Sign-Up" }, { title: "Sign-In", route: "/sign-in" }]
     },
     support: {
       title: "Support",

@@ -22,24 +22,11 @@
             />
           </v-list-item>
         </router-link>
-        <v-list-item class="px-2" link>
-          <v-list-item-avatar>
-            <v-img
-              src="https://randomuser.me/api/portraits/women/85.jpg"
-            ></v-img>
-          </v-list-item-avatar>
-          <v-list-item-content>
-            <v-list-item-title class="title">
-              Sandra Adams
-            </v-list-item-title>
-            <v-list-item-subtitle>sandra_a88@gmail.com</v-list-item-subtitle>
-          </v-list-item-content>
-        </v-list-item>
       </v-list>
 
       <v-divider></v-divider>
 
-      <v-list nav dense>
+      <v-list nav dense v-if="$auth.isAuthenticated">
         <v-list-item
           :key="index"
           :to="item.route"
@@ -107,6 +94,18 @@
         <span class="mr-2">Latest Release</span>
         <v-icon>mdi-open-in-new</v-icon>
       </v-btn>
+
+      <v-btn @click="login()" text v-if="!$auth.isAuthenticated"
+        ><!-- isAuthenticUser -->
+        Sign In
+      </v-btn>
+
+      <router-link to="/profile" v-if="$auth.isAuthenticated && $auth.user">
+        <v-avatar>
+          <img link :src="$auth.user.picture" />
+        </v-avatar>
+      </router-link>
+
       <v-progress-linear
         :v-if="$store.state.loading"
         :active="$store.state.loading"
@@ -139,6 +138,20 @@ import { Component, Vue } from "vue-property-decorator";
 })
 export default class App extends Vue {
   //router;
+
+  login() {
+    console.log("login!!");
+    //this.$auth.loginWithRedirect({})  // does not update the menu
+    this.$auth.loginWithPopup({});
+    if (this.$auth.isAuthenticated) {
+      JSON.stringify(this.$auth.user, null, 2);
+    }
+  }
+
+  created() {
+    console.log("created!!");
+    console.log("auth: ", this.$auth);
+  }
 
   name = "App";
 

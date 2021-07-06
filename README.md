@@ -22,3 +22,7 @@ npm run lint        # Linting
 
 ## Vuejs
 To customize, refer to [Configuration Reference](https://cli.vuejs.org/config/).
+
+# Security (Identity)
+
+1. Auth0 implementation as per "Adding Authentication to your Vue App" in [this article](https://auth0.com/blog/beginner-vuejs-tutorial-with-user-login/)

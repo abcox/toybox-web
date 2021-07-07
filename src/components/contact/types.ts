@@ -1,10 +1,12 @@
 import { Status } from "@/store/types";
+import { ContactDto } from "toybox-api-client";
 
-export interface Contact {
+// todo: substitute ContactDto in for local declared Contact
+export interface Contact extends ContactDto {
   id: string;
-  name: string;
+  /* name: string;
   email: string;
-  phone?: string;
+  phone: string; */
 }
 
 export interface ContactState {

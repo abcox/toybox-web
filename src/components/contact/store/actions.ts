@@ -1,63 +1,37 @@
 import { ActionTree } from "Vuex";
-import axios from "axios";
 import { Contact, ContactState } from "../types";
 import { RootState } from "@/store/types";
-import { Configuration, ContactApi } from "toybox-api-client";
+import { Configuration as ApiConfig, ContactApi } from "toybox-api-client";
 
-const baseUrl = "http://localhost:3000";
-const path = `${baseUrl}/contact`;
-const cfg = new Configuration({ basePath: baseUrl });
-const api = new ContactApi(cfg);
+const hostUrl = "http://localhost:3000";
+const basePath = `${hostUrl}/contact`;
+const apiConfig = new ApiConfig({ basePath: hostUrl });
+const api = new ContactApi(apiConfig);
 
 export const actions: ActionTree<ContactState, RootState> = {
   searchItems({ commit }, request): any {
-    console.log("search request: ", request);
-    /* axios
-      .get(`${baseUrl}/search`, {
-        params: { ...request }
-      })
-      .then(response => {
-        console.log("search response: ", response);
-        //const payload: Contact[] = response?.data;
-        commit("searchItemsSuccess", { ...response?.data });
-      })
-      .catch(err => {
-        commit("fetchItemsFailure", { err });
-      }); */
     api
-      .contactControllerGetContactList()
+      .getContacts()
       .then(response => {
-        console.log("fetch response: ", response);
-        const payload: any = response?.data;
-        commit("fetchItemsSuccess", payload);
+        commit("fetchItemsSuccess", response?.data);
       })
       .catch(err => {
         commit("fetchItemsFailure", { err });
       });
   },
   fetchItems({ commit }, request): any {
-    /* axios
-      .get(`${baseUrl}/list?${{ ...request }}`, {
-        // no data
-      }) */
     api
-      .contactControllerGetContactList()
+      .getContacts()
       .then(response => {
-        console.log("fetch response: ", response);
-        const payload: any = response?.data; // todo: review response type, and change to Contact[] ?
-        commit("fetchItemsSuccess", payload);
+        commit("fetchItemsSuccess", response?.data); // todo: review response type, and change to Contact[] ?
       })
       .catch(err => {
         commit("fetchItemsFailure", { err });
       });
   },
   deleteItem({ commit }, { id }): any {
-    axios
-      .delete(
-        `${baseUrl}/${id}` /* , null, {
-        headers: { 'x-csrf-token': this.xsrfToken }
-        } */
-      )
+    api
+      .deleteContact(id)
       .then(response => {
         commit("deleteItemSuccess", { payload: response?.data });
       })
@@ -70,12 +44,8 @@ export const actions: ActionTree<ContactState, RootState> = {
       );
   },
   updateItem({ commit }, { item }): any {
-    const targetItem = item;
-    /* axios
-      .patch(`${baseUrl}/${targetItem.id}`, { ...targetItem }) */
-
     api
-      .updateContact(targetItem.id, { ...targetItem })
+      .updateContact(item.id, { ...item })
       .then(response => {
         commit("updateItemSuccess", { item: response?.data });
       })
@@ -84,9 +54,8 @@ export const actions: ActionTree<ContactState, RootState> = {
       });
   },
   createItem({ commit }, { item }): any {
-    const newItem = item;
-    axios
-      .post(`${baseUrl}`, { ...newItem })
+    api
+      .createContact({ ...item })
       .then(response => {
         commit("createItemSuccess", { payload: response?.data });
       })

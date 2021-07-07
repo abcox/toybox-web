@@ -14,6 +14,7 @@
     "axios": "^0.21.1",
     "console": "^0.7.2",
     "core-js": "^3.6.5",
+    "moment": "^2.29.1",
     "register-service-worker": "^1.7.1",
     "rxjs": "^6.6.3",
     "toybox-api-client": "file:../api/client/typescript-axios",

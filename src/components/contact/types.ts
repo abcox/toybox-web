@@ -1,5 +1,5 @@
 import { Status } from "@/store/types";
-import { ContactDto } from "toybox-api-client";
+import { ContactDto } from "toybox-backend";
 
 // todo: substitute ContactDto in for local declared Contact
 export interface Contact extends ContactDto {

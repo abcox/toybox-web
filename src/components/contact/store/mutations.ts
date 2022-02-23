@@ -1,12 +1,23 @@
 import { MutationTree } from "Vuex";
 import { Contact, ContactListResponse, ContactState } from "../types";
+import {} from "toybox-backend";
 
 export const mutations: MutationTree<ContactState> = {
-  searchItemsSuccess(state, payload: ContactListResponse) {
+  searchItemsSuccess(state, payload: any) {
     console.log("searchItemsSuccess payload: ", payload);
     state.error = false;
-    state.items = payload.items;
-    state.totalItems = payload.totalItems;
+    state.items = payload?.data.docs;
+    state.totalItems = payload?.data.meta?.total;
+  },
+  searchItemsFailure(state, { err }) {
+    console.error(err);
+    state.error = true;
+    state.items = undefined;
+    state.status = {
+      show: true,
+      text: "Failed to fetch items",
+      color: "error"
+    };
   },
   fetchItemsSuccess(state, payload: Contact[]) {
     console.log("fetchItemsSuccess payload: ", payload);
@@ -29,6 +40,8 @@ export const mutations: MutationTree<ContactState> = {
     state.items = !state.items
       ? undefined
       : state.items?.filter(item => item.id !== id);
+    state.totalItems =
+      state.totalItems !== undefined ? state.totalItems - 1 : undefined;
     state.status = {
       show: true,
       text: meta.status.message,
@@ -72,6 +85,8 @@ export const mutations: MutationTree<ContactState> = {
     state.error = false;
     if (state.items) {
       state.items?.push(item);
+      state.totalItems =
+        state.totalItems !== undefined ? state.totalItems + 1 : undefined;
     }
     state.status = {
       show: true,

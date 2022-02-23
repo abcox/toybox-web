@@ -8,20 +8,23 @@ const api = new ContactApi(apiConfig);
 
 export const actions: ActionTree<ContactState, RootState> = {
   searchItems({ commit }, request): any {
+    console.log("searchItems request: ", request);
     api
       //.getContacts()
-      //.searchContacts()  // returns 500 -- TODO: figure out why..
-      .getContactList()
+      .searchContacts(
+        request.search,
+        request.options.itemsPerPage,
+        request.options.page
+      ) // returns 500 -- TODO: figure out why..
       .then(response => {
-        commit("fetchItemsSuccess", response?.data);
+        commit("searchItemsSuccess", response);
       })
       .catch(err => {
-        commit("fetchItemsFailure", { err });
+        commit("searchItemsFailure", { err });
       });
   },
   fetchItems({ commit }, request): any {
     api
-      //.getContacts()
       .getContactList()
       .then(response => {
         commit("fetchItemsSuccess", response?.data); // todo: review response type, and change to Contact[] ?
@@ -32,7 +35,6 @@ export const actions: ActionTree<ContactState, RootState> = {
   },
   deleteItem({ commit }, { id }): any {
     api
-      //.deleteContact(id)
       .deleteContact(id)
       .then(response => {
         commit("deleteItemSuccess", { payload: response?.data });
@@ -47,7 +49,6 @@ export const actions: ActionTree<ContactState, RootState> = {
   },
   updateItem({ commit }, { item }): any {
     api
-      //.updateContact(item.id, { ...item })
       .updateContact(item.id, { ...item })
       .then(response => {
         commit("updateItemSuccess", { item: response?.data });
@@ -58,7 +59,6 @@ export const actions: ActionTree<ContactState, RootState> = {
   },
   createItem({ commit }, { item }): any {
     api
-      //.createContact({ ...item })
       .createContact({ ...item })
       .then(response => {
         commit("createItemSuccess", { payload: response?.data });

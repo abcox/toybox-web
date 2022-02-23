@@ -334,7 +334,7 @@ export default class Home extends Vue {
 
   name = "contacts-component";
   title = "Contacts Component";
-  options = {};
+  options = { page: 1 };
   dialog = false;
   dialogDelete = false;
   headers = [
@@ -388,7 +388,7 @@ export default class Home extends Vue {
 
   @Watch("options", { immediate: true, deep: true })
   optionsChanged(options: any) {
-    this.searchItems({ search: this.search, options: this.options });
+    this.searchItems({ search: this.search, options });
   }
 
   @Watch("filterRangeFromDate")
@@ -428,7 +428,10 @@ export default class Home extends Vue {
   created() {
     console.log("created!");
     this.search$.pipe(debounceTime(500)).subscribe(search => {
-      this.searchItems({ search: this.search, options: this.options });
+      // prevent being on an empty page on new search by starting with page 1
+      this.options.page = 1;
+      console.log("search options: ", this.options);
+      this.searchItems({ search, options: this.options });
     });
   }
 

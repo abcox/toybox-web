@@ -84,7 +84,9 @@ export const mutations: MutationTree<ContactState> = {
     const { item, meta } = payload;
     state.error = false;
     if (state.items) {
-      state.items?.push(item);
+      const items = [item, ...state.items];
+      // improve state to know whether there is a next page, and if so then just do slice(0, -1)
+      state.items = items.length > 9 ? items.slice(0, -1) : items;
       state.totalItems =
         state.totalItems !== undefined ? state.totalItems + 1 : undefined;
     }

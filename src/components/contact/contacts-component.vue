@@ -315,7 +315,7 @@ export default class ContactListComponent extends Vue {
   // ref: https://github.com/ktsn/vuex-class
   @State("contact") contact!: ContactState;
   @Action("searchItems", { namespace }) searchItems!: (options: any) => any;
-  @Action("fetchItems", { namespace }) fetchItems: any;
+  //@Action("fetchItems", { namespace }) fetchItems: any;
   @Action("deleteItem", { namespace }) deleteItem!: (payload: any) => void;
   @Action("updateItem", { namespace }) updateItem!: (payload: any) => void;
   @Action("createItem", { namespace }) createItem!: (payload: any) => void;
@@ -388,7 +388,7 @@ export default class ContactListComponent extends Vue {
 
   @Watch("tableOptions", { immediate: true, deep: true })
   tableOptionsChanged(tableOptions: any) {
-    this.searchItems({ search: this.search, options: this.tableOptions });
+    this.searchItems({ search: this.search, options: tableOptions });
   }
 
   @Watch("filterRangeFromDate")
@@ -427,18 +427,26 @@ export default class ContactListComponent extends Vue {
 
   created() {
     console.log(`${this.$options.name} created!`);
+  }
+
+  mounted() {
+    console.log(`${this.$options.name} mounted!`);
     // debounce user search input
     this.search$.pipe(debounceTime(500)).subscribe(search => {
       // prevent being on an empty page on new search by starting with first page
+      //if (this.$store.state.loading) return;
       this.tableOptions.page = 1;
       console.log("search (debounced) tableOptions: ", this.tableOptions);
       this.searchItems({ search, options: this.tableOptions });
     });
   }
 
-  mounted() {
-    console.log(`${this.$options.name} mounted!`);
-    this.fetchItems(this.tableOptions);
+  beforeUpdated() {
+    console.log(`${this.$options.name} beforeUpdated!`);
+  }
+
+  updated() {
+    console.log(`${this.$options.name} updated!`);
   }
 
   editItem(item: Contact) {

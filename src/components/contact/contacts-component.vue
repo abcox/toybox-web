@@ -23,7 +23,7 @@
       :headers="computedHeaders"
       :items="items"
       :multi-sort="true"
-      :options.sync="options"
+      :options.sync="tableOptions"
       :server-items-length="totalItems"
       class="elevation-1"
       show-select
@@ -311,7 +311,7 @@ const namespace = "contact";
     //
   }
 })
-export default class Home extends Vue {
+export default class ContactListComponent extends Vue {
   // ref: https://github.com/ktsn/vuex-class
   @State("contact") contact!: ContactState;
   @Action("searchItems", { namespace }) searchItems!: (options: any) => any;
@@ -334,7 +334,7 @@ export default class Home extends Vue {
 
   name = "contacts-component";
   title = "Contacts Component";
-  options = { page: 1 };
+  tableOptions = { page: 1 };
   dialog = false;
   dialogDelete = false;
   headers = [
@@ -386,9 +386,9 @@ export default class Home extends Vue {
       .substring(0, 10);
   }
 
-  @Watch("options", { immediate: true, deep: true })
-  optionsChanged(options: any) {
-    this.searchItems({ search: this.search, options });
+  @Watch("tableOptions", { immediate: true, deep: true })
+  tableOptionsChanged(tableOptions: any) {
+    this.searchItems({ search: this.search, options: this.tableOptions });
   }
 
   @Watch("filterRangeFromDate")
@@ -426,18 +426,19 @@ export default class Home extends Vue {
   }
 
   created() {
-    console.log("created!");
+    console.log(`${this.$options.name} created!`);
+    // debounce user search input
     this.search$.pipe(debounceTime(500)).subscribe(search => {
-      // prevent being on an empty page on new search by starting with page 1
-      this.options.page = 1;
-      console.log("search options: ", this.options);
-      this.searchItems({ search, options: this.options });
+      // prevent being on an empty page on new search by starting with first page
+      this.tableOptions.page = 1;
+      console.log("search (debounced) tableOptions: ", this.tableOptions);
+      this.searchItems({ search, options: this.tableOptions });
     });
   }
 
   mounted() {
-    console.log("mounted!");
-    this.fetchItems(this.options);
+    console.log(`${this.$options.name} mounted!`);
+    this.fetchItems(this.tableOptions);
   }
 
   editItem(item: Contact) {

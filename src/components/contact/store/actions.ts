@@ -23,6 +23,9 @@ export const actions: ActionTree<ContactState, RootState> = {
       })
       .catch(err => {
         commit("searchItemsFailure", { err });
+      })
+      .finally(() => {
+        // nothing!
       });
   },
   fetchItems({ commit }, request): any {

@@ -80,13 +80,12 @@ export default Vue.extend({
   props: ["model"],
 
   created() {
-    console.log("model: ", this.model.title);
+    console.log(`${this.$options.name} created!`);
   },
 
   watch: {
     model(val) {
-      console.log("model: ", this.model.title);
-      console.log("val: ", val);
+      console.log("model: ", val);
     }
   },
 

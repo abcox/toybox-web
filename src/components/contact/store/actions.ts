@@ -12,6 +12,8 @@ export const actions: ActionTree<ContactState, RootState> = {
     api
       //.getContacts()
       .searchContacts(
+        request.options.sortDesc,
+        request.options.sortBy,
         request.search,
         request.options.itemsPerPage,
         request.options.page

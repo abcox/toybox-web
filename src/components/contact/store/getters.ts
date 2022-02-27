@@ -1,4 +1,4 @@
-import { GetterTree } from "vuex";
+import { GetterTree } from "Vuex";
 import { Contact, ContactState } from "../types";
 import { RootState, Status } from "@/store/types";
 
@@ -14,5 +14,8 @@ export const getters: GetterTree<ContactState, RootState> = {
   },
   status(state): Status {
     return state.status;
+  },
+  totalItems(state): number {
+    return state.totalItems || 1;
   }
 };

@@ -9,6 +9,7 @@ import { RootState } from "../../store/types";
 
 export const state: ContactState = {
   items: undefined,
+  totalItems: undefined,
   error: false,
   status: {
     show: false,

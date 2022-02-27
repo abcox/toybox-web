@@ -1,31 +1,46 @@
-import { ActionTree } from "vuex";
-import axios from "axios";
+import { ActionTree } from "Vuex";
 import { Contact, ContactState } from "../types";
 import { RootState } from "@/store/types";
+import { ContactApi } from "toybox-backend";
+import { config as apiConfig } from "@/api/config";
 
-const baseUrl = "http://localhost:3000/contact";
+const api = new ContactApi(apiConfig);
 
 export const actions: ActionTree<ContactState, RootState> = {
-  fetchItems({ commit }): any {
-    axios
-      .get<Contact[]>(`${baseUrl}/list`, {
-        // no data
-      })
+  searchItems({ commit }, request): any {
+    console.log("searchItems request: ", request);
+    api
+      //.getContacts()
+      .searchContacts(
+        request.options.sortDesc,
+        request.options.sortBy,
+        request.search,
+        request.options.itemsPerPage,
+        request.options.page
+      ) // returns 500 -- TODO: figure out why..
       .then(response => {
-        const payload: Contact[] = response?.data;
-        commit("fetchItemsSuccess", payload);
+        commit("searchItemsSuccess", response);
+      })
+      .catch(err => {
+        commit("searchItemsFailure", { err });
+      })
+      .finally(() => {
+        // nothing!
+      });
+  },
+  fetchItems({ commit }, request): any {
+    api
+      .getContactList()
+      .then(response => {
+        commit("fetchItemsSuccess", response?.data); // todo: review response type, and change to Contact[] ?
       })
       .catch(err => {
         commit("fetchItemsFailure", { err });
       });
   },
   deleteItem({ commit }, { id }): any {
-    axios
-      .delete(
-        `${baseUrl}/${id}` /* , null, {
-        headers: { 'x-csrf-token': this.xsrfToken }
-        } */
-      )
+    api
+      .deleteContact(id)
       .then(response => {
         commit("deleteItemSuccess", { payload: response?.data });
       })
@@ -38,9 +53,8 @@ export const actions: ActionTree<ContactState, RootState> = {
       );
   },
   updateItem({ commit }, { item }): any {
-    const targetItem = item;
-    axios
-      .patch(`${baseUrl}/${targetItem.id}`, { ...targetItem })
+    api
+      .updateContact(item.id, { ...item })
       .then(response => {
         commit("updateItemSuccess", { item: response?.data });
       })
@@ -49,9 +63,8 @@ export const actions: ActionTree<ContactState, RootState> = {
       });
   },
   createItem({ commit }, { item }): any {
-    const newItem = item;
-    axios
-      .post(`${baseUrl}`, { ...newItem })
+    api
+      .createContact({ ...item })
       .then(response => {
         commit("createItemSuccess", { payload: response?.data });
       })

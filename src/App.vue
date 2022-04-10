@@ -86,11 +86,7 @@
 
       <v-spacer></v-spacer>
 
-      <v-btn
-        href="https://github.com/vuetifyjs/vuetify/releases/latest"
-        target="_blank"
-        text
-      >
+      <v-btn href="https://github.com/abcox/toybox-web" target="_blank" text>
         <span class="mr-2">Latest Release</span>
         <v-icon>mdi-open-in-new</v-icon>
       </v-btn>
@@ -139,6 +135,12 @@ import { Component, Vue } from "vue-property-decorator";
 export default class App extends Vue {
   //router;
 
+  $auth;
+
+  setup() {
+    this.$auth = Vue.prototype.$auth;
+  }
+
   login() {
     console.log("login!!");
     //this.$auth.loginWithRedirect({})  // does not update the menu
@@ -148,8 +150,14 @@ export default class App extends Vue {
     }
   }
 
+  logout() {
+    this.$auth.logout({
+      returnTo: window.location.origin
+    });
+  }
+
   created() {
-    console.log("created!!");
+    console.log(`${this.$options.name} created!!`);
     console.log("auth: ", this.$auth);
   }
 

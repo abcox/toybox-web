@@ -52,6 +52,17 @@ export const actions: ActionTree<ContactState, RootState> = {
     } */
       );
   },
+  deleteItems({ commit }, idList: string[]) {
+    api
+      .deleteContacts(idList)
+      .then(response => {
+        console.log("response: ", response);
+        commit("deleteItemsSuccess", { payload: response?.data });
+      })
+      .catch(err => {
+        commit("deleteItemsFailure", { err });
+      });
+  },
   updateItem({ commit }, { item }): any {
     api
       .updateContact(item.id, { ...item })

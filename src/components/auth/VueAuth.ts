@@ -27,7 +27,7 @@ export class VueAuth extends Vue {
   user?: User;
   auth0Client?: Auth0Client;
   popupOpen = false;
-  error?: Error;
+  error?: Error | unknown;
 
   async getUser() {
     const auth0User = await this.auth0Client?.getUser();

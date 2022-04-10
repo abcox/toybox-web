@@ -133,11 +133,13 @@
                       </v-card-actions>
                     </v-card>
                   </v-dialog>
-                  <v-dialog v-model="dialogDelete" max-width="500px">
+                  <v-dialog v-model="dialogDelete" max-width="400px">
                     <v-card>
-                      <v-card-title class="headline"
-                        >Are you sure you want to delete this
-                        item?</v-card-title
+                      <v-card-title class="headline">
+                        Delete
+                        {{
+                          selectedItemCount > 1 ? "these items" : "this item"
+                        }}?</v-card-title
                       >
                       <v-card-actions>
                         <v-spacer></v-spacer>
@@ -317,6 +319,7 @@ export default class ContactListComponent extends Vue {
   @Action("searchItems", { namespace }) searchItems!: (options: any) => any;
   //@Action("fetchItems", { namespace }) fetchItems: any;
   @Action("deleteItem", { namespace }) deleteItem!: (payload: any) => void;
+  @Action("deleteItems", { namespace }) deleteItems!: (payload: any) => void;
   @Action("updateItem", { namespace }) updateItem!: (payload: any) => void;
   @Action("createItem", { namespace }) createItem!: (payload: any) => void;
   //@Getter('fullName', { namespace }) fullName: string;  // todo
@@ -372,7 +375,7 @@ export default class ContactListComponent extends Vue {
     .substring(0, 10);
   filterRangeToDateShow = false;
   actionItems: string[] = ["Delete", "Edit"];
-  selected: string[] = [];
+  selected: Contact[] = [];
 
   get formTitle() {
     return this.editedIndex === -1 ? "New Item" : "Edit Item";
@@ -384,6 +387,10 @@ export default class ContactListComponent extends Vue {
       .add(1, "year")
       .toISOString()
       .substring(0, 10);
+  }
+
+  get selectedItemCount(): number {
+    return this.selected.length;
   }
 
   @Watch("tableOptions", { immediate: true, deep: true })
@@ -463,7 +470,13 @@ export default class ContactListComponent extends Vue {
 
   confirmItemDeletion() {
     this.$store.commit("showLoading"); // todo: move to state
-    this.deleteItem({ ...this.editedItem });
+    //this.deleteItem({ ...this.editedItem });
+    const idList =
+      this.selected.length === 0
+        ? [this.editedItem.id]
+        : this.selected.map(item => item.id);
+    console.log("idList: ", idList);
+    this.deleteItems(idList);
     this.closeDelete();
     this.$store.commit("clearLoading");
   }

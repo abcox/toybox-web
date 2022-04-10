@@ -7,8 +7,6 @@ import vuetify from "./plugins/vuetify";
 import { Auth0Plugin } from "./components/auth";
 import { domain, clientId } from "./auth.config.json";
 
-Vue.config.productionTip = false;
-
 Vue.use(Auth0Plugin, {
   domain,
   clientId,
@@ -20,6 +18,8 @@ Vue.use(Auth0Plugin, {
     );
   }
 });
+
+Vue.config.productionTip = false;
 
 new Vue({
   router,

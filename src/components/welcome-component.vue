@@ -15,37 +15,27 @@
           {{ model.title }}
         </h1>
 
-        <p class="subheading font-weight-regular">
-          <a href="#">Sign up</a>, import your data, and take our demo for a
+        <p v-if="!$auth.isAuthenticated" class="subheading font-weight-regular">
+          <a href="#" @click="login()">Sign in</a> or
+          <a href="#" @click="register()">sign up</a> and take our demo for a
           spin!
+        </p>
+        <p v-if="$auth.isAuthenticated" class="subheading font-weight-regular">
+          Step 1: <a href="#">import your data</a>
         </p>
       </v-col>
 
-      <v-col class="mb-5" cols="12">
-        <h2 class="headline font-weight-bold mb-3">
-          {{ next.title }}
-        </h2>
-
-        <!-- <v-row justify="center">
-          <a
-            v-for="(next, i) in whatsNext"
-            :key="i"
-            :href="next.href"
-            class="subheading mx-3"
-            target="_blank"
-          >
-            {{ next.text }}
-          </a>
-        </v-row> -->
-        <v-btn
-          :href="action.route"
-          :key="i"
-          class="mx-3"
-          color="primary"
-          large
-          v-for="(action, i) in next.actions"
-        >
-          {{ action.title }}
+      <v-col v-if="!this.$auth.isAuthenticated" class="mb-5" cols="12">
+        <v-btn class="mx-3" color="primary" large @click="login()">
+          Sign-In
+        </v-btn>
+        <v-btn class="mx-3" color="primary" large @click="register()">
+          Sign-Up
+        </v-btn>
+      </v-col>
+      <v-col v-if="this.$auth.isAuthenticated" class="mb-5" cols="12">
+        <v-btn class="mx-3" color="primary" large @click="logoff()">
+          Sign-Out
         </v-btn>
       </v-col>
 
@@ -71,46 +61,59 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
+import { Component, Vue, Watch } from "vue-property-decorator";
 import SignIn from "./auth/sign-in.vue";
 
-export default Vue.extend({
-  name: "WelcomeComponent",
+@Component({
+  components: {
+    //HelloWorld
+  }
+})
+export default class App extends Vue {
+  name = "WelcomeComponent";
 
-  props: ["model"],
+  //props: ["model"];
 
   created() {
     console.log(`${this.$options.name} created!`);
-  },
+  }
 
-  watch: {
-    model(val) {
-      console.log("model: ", val);
-    }
-  },
+  @Watch("model")
+  modelChanged(val: any) {
+    console.log("model: ", val);
+  }
 
-  data: () => ({
-    next: {
-      title: "What's next?",
-      actions: [{ title: "Sign-Up" }, { title: "Sign-In", route: "/sign-in" }]
-    },
-    support: {
-      title: "Support",
-      links: [
-        {
-          text: "Documentation",
-          href: "https://vuetifyjs.com"
-        },
-        {
-          text: "Community",
-          href: "https://community.vuetifyjs.com"
-        },
-        {
-          text: "Contact",
-          href: "mailto:adam.cox@vorba.com"
-        }
-      ]
-    }
-  })
-});
+  login() {
+    this.$auth.loginWithPopup({});
+  }
+
+  logoff() {
+    this.$auth.logout({
+      returnTo: window.location.origin
+    });
+  }
+
+  register() {
+    alert("feature not implemented!");
+  }
+
+  model = {};
+  support = {
+    title: "Support",
+    links: [
+      {
+        text: "Documentation",
+        href: "https://vuetifyjs.com"
+      },
+      {
+        text: "Community",
+        href: "https://community.vuetifyjs.com"
+      },
+      {
+        text: "Contact",
+        href: "mailto:adam.cox@vorba.com"
+      }
+    ]
+  };
+}
 </script>

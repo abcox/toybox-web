@@ -25,6 +25,12 @@ import { Component, Vue } from "vue-property-decorator";
   }
 })
 export default class Profile extends Vue {
+  $auth;
+
+  setup() {
+    this.$auth = Vue.prototype.$auth;
+  }
+
   logout() {
     console.log("logout!!");
     console.log("returnTo: ", window.location.origin);

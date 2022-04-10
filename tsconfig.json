@@ -28,7 +28,8 @@
       "scripthost"
     ],
     "resolveJsonModule": true,
-    "noImplicitAny": false
+    "noImplicitAny": false,
+    "noImplicitThis": true
   },
   "include": [
     "src/**/*.ts",

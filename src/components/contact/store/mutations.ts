@@ -57,6 +57,31 @@ export const mutations: MutationTree<ContactState> = {
       color: "error"
     };
   },
+  deleteItemsSuccess(state, { payload }) {
+    state.error = false;
+    const items = state.items;
+    state.items = !state.items
+      ? undefined
+      : items?.filter(item => !payload.includes(item.id));
+    state.totalItems =
+      state.totalItems !== undefined
+        ? state.totalItems - payload.length
+        : undefined;
+    state.status = {
+      show: true,
+      text: `${payload.length} items deleted`,
+      color: "success"
+    };
+  },
+  deleteItemsFailure(state, { err }) {
+    console.error(err);
+    state.error = true;
+    state.status = {
+      show: true,
+      text: "Failed to delete items",
+      color: "error"
+    };
+  },
   updateItemSuccess(state, { item }) {
     const updatedItem = item;
     state.error = false;
